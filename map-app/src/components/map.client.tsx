@@ -12,7 +12,7 @@ export function KakaoMap({kakaoApiKey}:{kakaoApiKey: string}){
     longitude: 0
   });
 
-  const {isLoading, createMap, createMarker} = kakaoMapStore()
+  const {isLoading, createMap, clearMarker} = kakaoMapStore()
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -43,7 +43,10 @@ export function KakaoMap({kakaoApiKey}:{kakaoApiKey: string}){
       src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${kakaoApiKey}&autoload=false`}
       strategy="afterInteractive"
     />
-    <div id="kakao-map" className="min-h-[500px] h-full w-full !bg-white"/>
+    <div id="kakao-map" className="min-h-[500px] w-full !bg-white"/>
+    <div className="flex justify-center">
+      <button className="bg-sky-700 hover:bg-sky-800 text-white font-bold py-2 px-4 rounded" type="button" onClick={clearMarker}>마커 지우기</button>
+      </div>
   </>
   
 }

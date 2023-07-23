@@ -7,7 +7,8 @@ interface KakaoMapState {
   map: kakao.maps.Map | null;
   markers: kakao.maps.Marker[];
   createMap: (mapId: string, location: GEOLocation) => void;
-  createMarker: (latlng: kakao.maps.LatLng) => void;
+  createMarker: (latlng: kakao.maps.LatLng) => kakao.maps.Marker;
+  clearMarker: () => void;
 }
 
 const initialStore = {
@@ -45,15 +46,22 @@ export const kakaoMapStore = create<KakaoMapState>((set, get) =>({
       set({isLoading: false, map});
 
       const {createMarker} = get();
-      createMarker(map.getCenter());
+      const marker = createMarker(map.getCenter());
+      set({markers: [marker]});
 
       window.kakao.maps.event.addListener(map, 'click', function(mouseEvent: kakao.maps.event.MouseEvent) {
-        createMarker(mouseEvent.latLng);
+        const marker = createMarker(mouseEvent.latLng);
+        set(({markers}) => {
+          return {
+            markers: [...markers, marker]
+          }
+        })
+
         console.log(`위도: ${mouseEvent.latLng.getLat()}, 경도: ${mouseEvent.latLng.getLng()}`)
       })
     },
     createMarker: (latlng) => {
-      const {map, markers} = get();
+      const {map} = get();
 
       const marker = new window.kakao.maps.Marker({
         position: latlng
@@ -61,7 +69,25 @@ export const kakaoMapStore = create<KakaoMapState>((set, get) =>({
 
       marker.setMap(map);
       marker.setDraggable(true);
-      set({markers: [...markers, marker]});
+      return marker;
+    },
+    clearMarker: () => {
+      const {map, createMarker, markers} = get();
+
+      markers.forEach(marker => {
+        marker.setMap(null);
+      });
+
+      const newMarkers: kakao.maps.Marker[] = [];
+      const position = map?.getCenter();
+      if (position) {
+        const marker = createMarker(position);
+        newMarkers.push(marker);
+      }
+
+
+
+      set({markers});
     }
 	})
 );
