@@ -1,6 +1,10 @@
 import { GEOLocation } from "src/interfaces/common";
 import { create } from "zustand";
 
+declare const window: typeof globalThis & {
+  kakao: any;
+};
+
 interface KakaoMapState {
   kakao: any;
   isLoading: boolean;

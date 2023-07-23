@@ -30,7 +30,7 @@ export function KakaoMap({kakaoApiKey}:{kakaoApiKey: string}){
 
   useEffect(() => {
     createMap("kakao-map", location);
-  }, [location, window.kakao]);
+  }, [location]);
 
   return <>
     <Script
