@@ -5,13 +5,14 @@ import { GEOLocation } from "src/interfaces/common";
 import Script from "next/script";
 import { kakaoMapStore } from "src/store/kakaoMapStore";
 
+
 export function KakaoMap({kakaoApiKey}:{kakaoApiKey: string}){
   const [location, setLocation] = useState<GEOLocation>({
     latitude: 0,
     longitude: 0
   });
 
-  const {isLoading, createMap} = kakaoMapStore()
+  const {isLoading, createMap, createMarker} = kakaoMapStore()
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -29,7 +30,12 @@ export function KakaoMap({kakaoApiKey}:{kakaoApiKey: string}){
   }, [])
 
   useEffect(() => {
-    createMap("kakao-map", location);
+    window.kakao?.maps.load(
+      () => {
+        createMap("kakao-map", location);
+      }
+    );
+
   }, [location]);
 
   return <>
