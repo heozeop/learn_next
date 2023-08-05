@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense, useEffect, useLayoutEffect, useRef, useState, useTransition } from "react";
+import { Suspense, use, useEffect, useLayoutEffect, useRef, useState, useTransition } from "react";
 import { GEOLocation } from "src/interfaces/common";
 import Script from "next/script";
 import { kakaoMapStore } from "src/store/kakaoMapStore";
@@ -12,7 +12,7 @@ export function KakaoMap({kakaoApiKey}:{kakaoApiKey: string}){
     longitude: 0
   });
 
-  const {isLoading, createMap, clearMarker} = kakaoMapStore()
+  const {isLoading, createMap, clearMarker, } = kakaoMapStore()
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -37,6 +37,7 @@ export function KakaoMap({kakaoApiKey}:{kakaoApiKey: string}){
     );
 
   }, [location]);
+
 
   return <>
     <Script

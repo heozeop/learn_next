@@ -89,5 +89,6 @@ export const kakaoMapStore = create<KakaoMapState>((set, get) =>({
 
       set({markers});
     }
+
 	})
 );
